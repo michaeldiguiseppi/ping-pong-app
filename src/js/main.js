@@ -9,6 +9,7 @@ var player2 = new Player();
 var newGame = new Game();
 
 
+
 $('#add').on('click', function (event) {
     event.preventDefault();
 
@@ -17,8 +18,16 @@ $('#add').on('click', function (event) {
     newGame.players.push(player1);
     newGame.players.push(player2);
 
+    newGame.printNamesToDom(this.players);
+
     console.log('Player 1: ', player1, 'Player 2: ', player2, 'Game: ', newGame);
+    gameState();
 
 });
+
+
+$(document).on('click', '.playerBtn',function () {
+    $(this).append('<span>√</span>');
+})
 
 
