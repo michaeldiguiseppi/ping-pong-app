@@ -12,22 +12,37 @@ var newGame = new Game();
 
 $('#add').on('click', function (event) {
     event.preventDefault();
-
-    player1.name = $('#player1').val();
-    player2.name = $('#player2').val();
-    newGame.players.push(player1);
-    newGame.players.push(player2);
-
+    newGame.players = [];
+    newGame.addPlayersToGame();
     newGame.printNamesToDom(this.players);
 
     console.log('Player 1: ', player1, 'Player 2: ', player2, 'Game: ', newGame);
     gameState();
-
 });
 
 
-$(document).on('click', '.playerBtn',function () {
-    $(this).append('<span>√</span>');
-})
+$(document).on('click', '.playerBtn', function () {
+    if ($(this).val() === player1.name) {
+        newGame.addWins(player1);
+    } else {
+        newGame.addWins(player2);
+    }
+    newGame.printWinsToDom(this.players);
+    newGame.calculateWinner();
+});
+
+$('input[name="optionsRadios"]').on('click', function () {
+    $('#player1').text('');
+    $('#player2').text('');
+    $('#scores').text('');
+    $('#player1Name, #player2Name').text('');
+    player1.numberOfWins = 0;
+    player2.numberOfWins = 0;
+});
+
+$('#reset').on('click', function ( event ) {
+    event.preventDefault();
+    $('#player1Name, #player2Name, #scores').text('');
+});
 
 
