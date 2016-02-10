@@ -125,13 +125,14 @@ Game.prototype.addStatsToLocalStorage = function ( player ) {
     };
 }
 
-Game.prototype.updateLocalStorage = function () {
+Game.prototype.updateLocalStorage = function ( player ) {
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
     var newArray = [];
-    for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
-        if(currentStateOfLocalStorage[i].name) {
-            currentStateOfLocalStorage[i].totalGames = this.players[i].totalGames;
-            currentStateOfLocalStorage[i].totalNumberOfWins = this.players[i].totalNumberOfWins;
+    var thisPlayer = findPlayer(player, this.players)
+    for (var i = 0; i < thisPlayer.length; i++) {
+        if(currentStateOfLocalStorage[i].name === thisPlayer[i].name) {
+            currentStateOfLocalStorage[i].totalGames = thisPlayer[i].totalGames;
+            currentStateOfLocalStorage[i].totalNumberOfWins = thisPlayer[i].totalNumberOfWins;
         };
         newArray.push(currentStateOfLocalStorage[i]);
     };
@@ -139,17 +140,24 @@ Game.prototype.updateLocalStorage = function () {
 }
 
 Game.prototype.addStatsFromLocalStorageToDom = function () {
+    $('#playerStats').text('');
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
     currentStateOfLocalStorage.forEach(function ( player ) {
         $('#playerStats').append('<tr><td>'+player.name+'</td><td>'+player.totalNumberOfWins+'</td><td>'+player.totalGames+'</td></tr>');
     });
 }
 
-function checkObject (playerObj, array) {
+function checkObject ( playerObj, array ) {
     return array.filter(function (el, index) {
         return el.name === playerObj.name;
     });
 };
+
+function findPlayer ( playerObj, array ) {
+    return array.filter(function (el, index) {
+        return el.name === playerObj.name;
+    });
+}
 
 // addDataFromLocalStorageToDom();
         // $('table').on('click', '#increment', function() {
