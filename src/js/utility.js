@@ -111,6 +111,23 @@ Game.prototype.calculateWinner = function () {
 }
 
 
+Game.prototype.addStatsToLocalStorage = function ( player ) {
+    if(!JSON.parse(localStorage.getItem('playerStats'))) {
+        localStorage.setItem('playerStats', JSON.stringify([]));
+    };
+    var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
+    var playerToPush = checkObject(player, currentStateOfLocalStorage);
+    if (playerToPush.length === 0) {
+        currentStateOfLocalStorage.push(player);
+        localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
+    };
 
+}
+
+function checkObject (playerObj, array) {
+    return array.filter(function (el, index) {
+        return el.name === playerObj.name;
+    });
+};
 
 

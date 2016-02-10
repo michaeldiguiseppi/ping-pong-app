@@ -15,6 +15,9 @@ $('#add').on('click', function (event) {
     newGame.players = [];
     newGame.addPlayersToGame();
     newGame.printNamesToDom(this.players);
+    newGame.players.forEach(function ( player ) {
+        newGame.addStatsToLocalStorage(player);
+    });
 
     console.log('Player 1: ', player1, 'Player 2: ', player2, 'Game: ', newGame);
     gameState();
