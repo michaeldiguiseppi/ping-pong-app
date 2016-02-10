@@ -28,9 +28,11 @@ $(document).on('click', '.playerBtn', function () {
     if ($(this).val() === player1.name) {
         newGame.addWins(player1);
         newGame.addGames(this.players);
+        newGame.updateLocalStorage();
     } else {
         newGame.addWins(player2);
         newGame.addGames(this.players);
+        newGame.updateLocalStorage();
     }
     newGame.printWinsToDom(this.players);
     newGame.calculateWinner();
@@ -49,6 +51,11 @@ $('input[name="optionsRadios"]').on('click', function () {
 $('#reset').on('click', function ( event ) {
     event.preventDefault();
     $('#player1Name, #player2Name, #scores').text('');
+});
+
+
+$('#updateStats').on('click', function () {
+    newGame.addStatsFromLocalStorageToDom();
 });
 
 

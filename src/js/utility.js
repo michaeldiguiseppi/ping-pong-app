@@ -4,12 +4,14 @@ function Player ( name ) {
     this.totalNumberOfWins = 0;
     this.totalGames = 0;
     this.seriesGames = 0;
+    // this.winPercentage = 0;
 }
 
-Player.prototype.calculateWinPercentage = function () {
-    var winPercentage = (this.numberOfWins / this.totalGames) * 100;
-    console.log(winPercentage);
-}
+// Player.prototype.calculateWinPercentage = function () {
+//     if (this.totalGames > 0) {
+//         this.winPercentage = (this.numberOfWins / this.totalGames) * 100;
+//     };
+// }
 
 
 function Game ( array ) {
@@ -121,7 +123,26 @@ Game.prototype.addStatsToLocalStorage = function ( player ) {
         currentStateOfLocalStorage.push(player);
         localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
     };
+}
 
+Game.prototype.updateLocalStorage = function () {
+    var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
+    var newArray = [];
+    for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
+        if(currentStateOfLocalStorage[i].name) {
+            currentStateOfLocalStorage[i].totalGames = this.players[i].totalGames;
+            currentStateOfLocalStorage[i].totalNumberOfWins = this.players[i].totalNumberOfWins;
+        };
+        newArray.push(currentStateOfLocalStorage[i]);
+    };
+    localStorage.setItem('playerStats', JSON.stringify(newArray));
+}
+
+Game.prototype.addStatsFromLocalStorageToDom = function () {
+    var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
+    currentStateOfLocalStorage.forEach(function ( player ) {
+        $('#playerStats').append('<tr><td>'+player.name+'</td><td>'+player.totalNumberOfWins+'</td><td>'+player.totalGames+'</td></tr>');
+    });
 }
 
 function checkObject (playerObj, array) {
@@ -130,4 +151,24 @@ function checkObject (playerObj, array) {
     });
 };
 
+// addDataFromLocalStorageToDom();
+        // $('table').on('click', '#increment', function() {
+        //     var button = this;
+        //     var itemName = $(button).attr('data-name');
+
+        //     var newArray = [];
+        // // get data from local storage
+        //     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('items'))
+        // // increment quantity associated with the specific item
+        //     for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
+        //         if (currentStateOfLocalStorage[i].name === itemName) {
+        //             currentStateOfLocalStorage[i].quantity++;
+        //         };
+        //     newArray.push(currentStateOfLocalStorage[i]);
+        //     };
+        //     localStorage.setItem('items', JSON.stringify(newArray));
+        // // set data back to local storage
+        // // update the dom
+        //     addDataFromLocalStorageToDom();
+        // });
 
