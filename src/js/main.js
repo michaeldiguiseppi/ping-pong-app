@@ -24,11 +24,14 @@ $('#add').on('click', function (event) {
 $(document).on('click', '.playerBtn', function () {
     if ($(this).val() === player1.name) {
         newGame.addWins(player1);
+        newGame.addGames(this.players);
     } else {
         newGame.addWins(player2);
+        newGame.addGames(this.players);
     }
     newGame.printWinsToDom(this.players);
     newGame.calculateWinner();
+
 });
 
 $('input[name="optionsRadios"]').on('click', function () {

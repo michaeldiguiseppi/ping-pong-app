@@ -1,6 +1,14 @@
 function Player ( name ) {
     this.name = name;
     this.numberOfWins = 0;
+    this.totalNumberOfWins = 0;
+    this.totalGames = 0;
+    this.seriesGames = 0;
+}
+
+Player.prototype.calculateWinPercentage = function () {
+    var winPercentage = (this.numberOfWins / this.totalGames) * 100;
+    console.log(winPercentage);
 }
 
 
@@ -40,6 +48,12 @@ Game.prototype.addWins = function ( player ) {
     return player.numberOfWins;
 }
 
+Game.prototype.addGames = function () {
+    return this.players.forEach(function ( player ) {
+        return player.seriesGames++;
+    });
+}
+
 
 Game.prototype.printWinsToDom = function () {
     $('#scores').text('');
@@ -53,25 +67,50 @@ Game.prototype.calculateWinner = function () {
         if (player1.numberOfWins === 2) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the 3 game series!</h1>');
+            player1.totalNumberOfWins++;
+            player1.totalGames++;
+            player2.totalGames++;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
+            player1.seriesGames = 0;
+            player2.seriesGames = 0;
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the 3 game series!</h1>');
+            player2.totalNumberOfWins++;
+            player1.totalGames++;
+            player2.totalGames++;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
+            player1.seriesGames = 0;
+            player2.seriesGames = 0;
         };
     } else if (((player1.numberOfWins + player2.numberOfWins === 5) || player1.numberOfWins === 3 || player2.numberOfWins === 3) && (newGame.numberOfGames === 5)) {
         if (player1.numberOfWins === 3) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the 5 game series!</h1>');
+            player1.totalNumberOfWins++;
+            player1.totalGames++;
+            player2.totalGames++;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
+            player1.seriesGames = 0;
+            player2.seriesGames = 0;
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the 5 game series!</h1>');
+            player2.totalNumberOfWins++;
+            player1.totalGames++;
+            player2.totalGames++;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
+            player1.seriesGames = 0;
+            player2.seriesGames = 0;
         };
     };
 }
+
+
+
+
+

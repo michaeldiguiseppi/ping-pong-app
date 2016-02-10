@@ -1,6 +1,5 @@
 /* add custom styles */
 
-
 .playerBtn {
     width: 100%;
 }
@@ -8,4 +7,9 @@
 #player1Name, #player2Name {
     display: inline-block;
     width: 45%;
+}
+
+
+thead {
+    border-bottom: 1px solid black;
 }
