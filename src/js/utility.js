@@ -39,8 +39,10 @@ Game.prototype.addPlayersToGame = function () {
 function gameState () {
     if ($('input[name="optionsRadios"]:checked').val() === 'threeGames') {
         newGame.numberOfGames = 3;
-    } else {
+    } else if ($('input[name="optionsRadios"]:checked').val() === 'fiveGames') {
         newGame.numberOfGames = 5;
+    } else {
+        newGame.numberOfGames = 1;
     }
     console.log(newGame.numberOfGames);
 }
@@ -86,7 +88,8 @@ Game.prototype.calculateWinner = function () {
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
             player2.seriesGames = 0;
-        };
+        }
+        newGame.saveStats(player1, player2);
     } else if (((player1.numberOfWins + player2.numberOfWins === 5) || player1.numberOfWins === 3 || player2.numberOfWins === 3) && (newGame.numberOfGames === 5)) {
         if (player1.numberOfWins === 3) {
             $('#scores').text('');
@@ -109,8 +112,33 @@ Game.prototype.calculateWinner = function () {
             player1.seriesGames = 0;
             player2.seriesGames = 0;
         };
+        newGame.saveStats(player1, player2);
+    } else if ( newGame.numberOfGames === 1 ) {
+        if (player1.numberOfWins === 1) {
+            $('#scores').text('');
+            $('#scores').append('<h1>'+player1.name+' wins the game!</h1>');
+            player1.totalNumberOfWins++;
+            player1.totalGames++;
+            player2.totalGames++;
+            player1.numberOfWins = 0;
+            player2.numberOfWins = 0;
+            player1.seriesGames = 0;
+            player2.seriesGames = 0;
+        } else {
+            $('#scores').text('');
+            $('#scores').append('<h1>'+player2.name+' wins the game!</h1>');
+            player2.totalNumberOfWins++;
+            player1.totalGames++;
+            player2.totalGames++;
+            player1.numberOfWins = 0;
+            player2.numberOfWins = 0;
+            player1.seriesGames = 0;
+            player2.seriesGames = 0;
+        };
+        newGame.saveStats(player1, player2);
     };
 }
+
 
 
 Game.prototype.addStatsToLocalStorage = function ( player ) {
@@ -125,25 +153,80 @@ Game.prototype.addStatsToLocalStorage = function ( player ) {
     };
 }
 
-Game.prototype.updateLocalStorage = function ( player ) {
+// Game.prototype.updateLocalStorage = function ( player ) {
+//     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
+//     var newArray = [];
+//     var thisPlayer = findPlayer(player, this.players)
+
+//     console.log(thisPlayer);
+
+
+//     for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
+//         if(currentStateOfLocalStorage[i].name === thisPlayer[i].name) {
+//             currentStateOfLocalStorage[i].totalGames++;
+//             currentStateOfLocalStorage[i].totalNumberOfWins++;
+//             newArray.push(currentStateOfLocalStorage[i]);
+//         } else {
+//             newArray.push(currentStateOfLocalStorage[i]);
+//         }
+//     };
+//     localStorage.setItem('playerStats', JSON.stringify(newArray));
+// }
+
+// Game.prototype.saveStats = function () {
+//     if(!JSON.parse(localStorage.getItem('playerStats'))) {
+//         localStorage.setItem('playerStats', JSON.stringify([]));
+//     } else {
+//         var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
+//         this.players.forEach(function(player, ind, arr) {
+//             var playerToPush = checkObject(player, currentStateOfLocalStorage);
+//             if (playerToPush.length === 0) {
+//                 currentStateOfLocalStorage.push( player );
+//                 localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
+//             } else {
+//                 currentStateOfLocalStorage.push( player )
+//                 localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
+//             }
+//         });
+
+
+
+
+//         // console.log(currentStateOfLocalStorage);
+//         // localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
+//     }
+// };
+
+Game.prototype.saveStats = function(player1, player2) {
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
-    var newArray = [];
-    var thisPlayer = findPlayer(player, this.players)
 
-    console.log(thisPlayer);
+    var firstPlayer = findPlayer(player1, currentStateOfLocalStorage);
+    var secondPlayer = findPlayer(player2, currentStateOfLocalStorage);
+
+    console.log('current State: ', currentStateOfLocalStorage);
+    console.log('first: ', firstPlayer, 'second: ', secondPlayer);
 
 
-    for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
-        if(currentStateOfLocalStorage[i].name === thisPlayer[i].name) {
-            currentStateOfLocalStorage[i].totalGames++;
-            currentStateOfLocalStorage[i].totalNumberOfWins++;
-            newArray.push(currentStateOfLocalStorage[i]);
-        } else {
-            newArray.push(currentStateOfLocalStorage[i]);
-        }
-    };
-    localStorage.setItem('playerStats', JSON.stringify(newArray));
-}
+    // this.players.forEach(function(el, ind, arr) {
+    //     console.log(arr.indexOf(el));
+    //     var foundPlayer = findPlayer(el, currentStateOfLocalStorage);
+    //     if ( foundPlayer.length === 0 ) {
+    //         currentStateOfLocalStorage.push(el);
+    //     } else {
+    //         currentStateOfLocalStorage.splice(ind, 1);
+    //         currentStateOfLocalStorage.push(el);
+    //         console.log(currentStateOfLocalStorage);
+    //         debugger;
+    //         // currentStateOfLocalStorage = arr;
+
+    //     }
+    //     console.log(el);
+
+    // });
+
+    console.log(currentStateOfLocalStorage);
+    localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
+};
 
 Game.prototype.addStatsFromLocalStorageToDom = function () {
     $('#playerStats').text('');

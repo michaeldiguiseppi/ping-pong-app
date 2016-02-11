@@ -2,6 +2,7 @@
 
 $(document).on('ready', function() {
   console.log('sanity check!');
+  $('#updateStats').click();
 });
 
 var player1 = new Player();
