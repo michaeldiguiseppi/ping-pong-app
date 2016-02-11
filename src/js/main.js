@@ -28,11 +28,9 @@ $(document).on('click', '.playerBtn', function () {
     if ($(this).val() === player1.name) {
         newGame.addWins(player1);
         newGame.addGames(this.players);
-        newGame.updateLocalStorage(player1);
     } else {
         newGame.addWins(player2);
         newGame.addGames(this.players);
-        newGame.updateLocalStorage(player2);
     }
     newGame.printWinsToDom(this.players);
     newGame.calculateWinner();

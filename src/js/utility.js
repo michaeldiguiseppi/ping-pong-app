@@ -129,12 +129,18 @@ Game.prototype.updateLocalStorage = function ( player ) {
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
     var newArray = [];
     var thisPlayer = findPlayer(player, this.players)
-    for (var i = 0; i < thisPlayer.length; i++) {
+
+    console.log(thisPlayer);
+
+
+    for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
         if(currentStateOfLocalStorage[i].name === thisPlayer[i].name) {
-            currentStateOfLocalStorage[i].totalGames = thisPlayer[i].totalGames;
-            currentStateOfLocalStorage[i].totalNumberOfWins = thisPlayer[i].totalNumberOfWins;
-        };
-        newArray.push(currentStateOfLocalStorage[i]);
+            currentStateOfLocalStorage[i].totalGames++;
+            currentStateOfLocalStorage[i].totalNumberOfWins++;
+            newArray.push(currentStateOfLocalStorage[i]);
+        } else {
+            newArray.push(currentStateOfLocalStorage[i]);
+        }
     };
     localStorage.setItem('playerStats', JSON.stringify(newArray));
 }
