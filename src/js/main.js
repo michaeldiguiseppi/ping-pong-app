@@ -57,4 +57,8 @@ $('#updateStats').on('click', function () {
     newGame.addStatsFromLocalStorageToDom();
 });
 
+$('#resetStats').on('click', function () {
+
+})
+
 

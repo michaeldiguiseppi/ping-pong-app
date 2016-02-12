@@ -4,14 +4,8 @@ function Player ( name ) {
     this.totalNumberOfWins = 0;
     this.totalGames = 0;
     this.seriesGames = 0;
-    // this.winPercentage = 0;
+    this.isWinner = false;
 }
-
-// Player.prototype.calculateWinPercentage = function () {
-//     if (this.totalGames > 0) {
-//         this.winPercentage = (this.numberOfWins / this.totalGames) * 100;
-//     };
-// }
 
 
 function Game ( array ) {
@@ -71,9 +65,7 @@ Game.prototype.calculateWinner = function () {
         if (player1.numberOfWins === 2) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the 3 game series!</h1>');
-            player1.totalNumberOfWins++;
-            player1.totalGames++;
-            player2.totalGames++;
+            player1.isWinner = true;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
@@ -81,9 +73,7 @@ Game.prototype.calculateWinner = function () {
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the 3 game series!</h1>');
-            player2.totalNumberOfWins++;
-            player1.totalGames++;
-            player2.totalGames++;
+            player2.isWinner = true;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
@@ -94,9 +84,7 @@ Game.prototype.calculateWinner = function () {
         if (player1.numberOfWins === 3) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the 5 game series!</h1>');
-            player1.totalNumberOfWins++;
-            player1.totalGames++;
-            player2.totalGames++;
+            player1.isWinner = true;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
@@ -104,9 +92,7 @@ Game.prototype.calculateWinner = function () {
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the 5 game series!</h1>');
-            player2.totalNumberOfWins++;
-            player1.totalGames++;
-            player2.totalGames++;
+            player2.isWinner = true;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
@@ -117,9 +103,7 @@ Game.prototype.calculateWinner = function () {
         if (player1.numberOfWins === 1) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the game!</h1>');
-            player1.totalNumberOfWins++;
-            player1.totalGames++;
-            player2.totalGames++;
+            player1.isWinner = true;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
@@ -127,9 +111,7 @@ Game.prototype.calculateWinner = function () {
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the game!</h1>');
-            player2.totalNumberOfWins++;
-            player1.totalGames++;
-            player2.totalGames++;
+            player2.isWinner = true;
             player1.numberOfWins = 0;
             player2.numberOfWins = 0;
             player1.seriesGames = 0;
@@ -153,79 +135,29 @@ Game.prototype.addStatsToLocalStorage = function ( player ) {
     };
 }
 
-// Game.prototype.updateLocalStorage = function ( player ) {
-//     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
-//     var newArray = [];
-//     var thisPlayer = findPlayer(player, this.players)
-
-//     console.log(thisPlayer);
-
-
-//     for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
-//         if(currentStateOfLocalStorage[i].name === thisPlayer[i].name) {
-//             currentStateOfLocalStorage[i].totalGames++;
-//             currentStateOfLocalStorage[i].totalNumberOfWins++;
-//             newArray.push(currentStateOfLocalStorage[i]);
-//         } else {
-//             newArray.push(currentStateOfLocalStorage[i]);
-//         }
-//     };
-//     localStorage.setItem('playerStats', JSON.stringify(newArray));
-// }
-
-// Game.prototype.saveStats = function () {
-//     if(!JSON.parse(localStorage.getItem('playerStats'))) {
-//         localStorage.setItem('playerStats', JSON.stringify([]));
-//     } else {
-//         var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
-//         this.players.forEach(function(player, ind, arr) {
-//             var playerToPush = checkObject(player, currentStateOfLocalStorage);
-//             if (playerToPush.length === 0) {
-//                 currentStateOfLocalStorage.push( player );
-//                 localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
-//             } else {
-//                 currentStateOfLocalStorage.push( player )
-//                 localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
-//             }
-//         });
 
 
 
-
-//         // console.log(currentStateOfLocalStorage);
-//         // localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
-//     }
-// };
-
-Game.prototype.saveStats = function(player1, player2) {
+Game.prototype.saveStats = function( player1, player2 ) {
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
 
-    var firstPlayer = findPlayer(player1, currentStateOfLocalStorage);
-    var secondPlayer = findPlayer(player2, currentStateOfLocalStorage);
 
-    console.log('current State: ', currentStateOfLocalStorage);
-    console.log('first: ', firstPlayer, 'second: ', secondPlayer);
+    for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
+        if (player1.name === currentStateOfLocalStorage[i].name && player1.isWinner === true) {
+            currentStateOfLocalStorage[i].totalNumberOfWins++;
+            currentStateOfLocalStorage[i].totalGames++;
+            player1.isWinner = false;
+        } else if (player2.name === currentStateOfLocalStorage[i].name && player2.isWinner === true) {
+            currentStateOfLocalStorage[i].totalNumberOfWins++;
+            currentStateOfLocalStorage[i].totalGames++;
+            player2.isWinner = false;
+        } else if (player1.name === currentStateOfLocalStorage[i].name || player2.name === currentStateOfLocalStorage[i].name) {
+            currentStateOfLocalStorage[i].totalGames++;
+        }
+    };
 
-
-    // this.players.forEach(function(el, ind, arr) {
-    //     console.log(arr.indexOf(el));
-    //     var foundPlayer = findPlayer(el, currentStateOfLocalStorage);
-    //     if ( foundPlayer.length === 0 ) {
-    //         currentStateOfLocalStorage.push(el);
-    //     } else {
-    //         currentStateOfLocalStorage.splice(ind, 1);
-    //         currentStateOfLocalStorage.push(el);
-    //         console.log(currentStateOfLocalStorage);
-    //         debugger;
-    //         // currentStateOfLocalStorage = arr;
-
-    //     }
-    //     console.log(el);
-
-    // });
-
-    console.log(currentStateOfLocalStorage);
     localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
+
 };
 
 Game.prototype.addStatsFromLocalStorageToDom = function () {
@@ -248,24 +180,5 @@ function findPlayer ( playerObj, array ) {
     });
 }
 
-// addDataFromLocalStorageToDom();
-        // $('table').on('click', '#increment', function() {
-        //     var button = this;
-        //     var itemName = $(button).attr('data-name');
 
-        //     var newArray = [];
-        // // get data from local storage
-        //     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('items'))
-        // // increment quantity associated with the specific item
-        //     for (var i = 0; i < currentStateOfLocalStorage.length; i++) {
-        //         if (currentStateOfLocalStorage[i].name === itemName) {
-        //             currentStateOfLocalStorage[i].quantity++;
-        //         };
-        //     newArray.push(currentStateOfLocalStorage[i]);
-        //     };
-        //     localStorage.setItem('items', JSON.stringify(newArray));
-        // // set data back to local storage
-        // // update the dom
-        //     addDataFromLocalStorageToDom();
-        // });
 
