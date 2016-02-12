@@ -58,7 +58,10 @@ $('#updateStats').on('click', function () {
 });
 
 $('#resetStats').on('click', function () {
-
+    var currentState = JSON.parse(localStorage.getItem('playerStats'));
+    currentState = [];
+    localStorage.setItem('playerStats', JSON.stringify(currentState));
+    $('#updateStats').click();
 })
 
 
