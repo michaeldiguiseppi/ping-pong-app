@@ -163,6 +163,9 @@ Game.prototype.saveStats = function( player1, player2 ) {
 Game.prototype.addStatsFromLocalStorageToDom = function () {
     $('#playerStats').text('');
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
+    currentStateOfLocalStorage = currentStateOfLocalStorage.sort(function (a, b) {
+        return b.totalNumberOfWins - a.totalNumberOfWins;
+    });
     currentStateOfLocalStorage.forEach(function ( player ) {
         $('#playerStats').append('<tr><td>'+player.name+'</td><td>'+player.totalNumberOfWins+'</td><td>'+player.totalGames+'</td></tr>');
     });
@@ -174,11 +177,6 @@ function checkObject ( playerObj, array ) {
     });
 };
 
-function findPlayer ( playerObj, array ) {
-    return array.filter(function (el, index) {
-        return el.name === playerObj.name;
-    });
-}
 
 
 
