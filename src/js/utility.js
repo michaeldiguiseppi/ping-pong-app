@@ -160,7 +160,7 @@ Game.prototype.addStatsFromLocalStorageToDom = function () {
     $('#playerStats').text('');
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
     currentStateOfLocalStorage = currentStateOfLocalStorage.sort(function (a, b) {
-        return b.totalNumberOfWins - a.totalNumberOfWins;
+        return b.winPercent - a.winPercent;
     });
     currentStateOfLocalStorage.forEach(function ( player ) {
         $('#playerStats').append('<tr><td>'+player.name+'</td><td>'+player.totalNumberOfWins+'</td><td>'+player.totalGames+'</td><td>'+player.winPercent+'%</td></tr>');
