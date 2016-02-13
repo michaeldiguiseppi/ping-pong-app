@@ -1,7 +1,6 @@
 // add scripts
 
 $(document).on('ready', function() {
-  console.log('sanity check!');
   $('#updateStats').click();
 });
 
@@ -19,8 +18,6 @@ $('#add').on('click', function (event) {
     newGame.players.forEach(function ( player ) {
         newGame.addStatsToLocalStorage(player);
     });
-
-    console.log('Player 1: ', player1, 'Player 2: ', player2, 'Game: ', newGame);
     gameState();
 });
 
@@ -62,6 +59,6 @@ $('#resetStats').on('click', function () {
     currentState = [];
     localStorage.setItem('playerStats', JSON.stringify(currentState));
     $('#updateStats').click();
-})
+});
 
 

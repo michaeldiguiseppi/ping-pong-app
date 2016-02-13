@@ -5,6 +5,12 @@ function Player ( name ) {
     this.totalGames = 0;
     this.seriesGames = 0;
     this.isWinner = false;
+    this.winPercent = 0;
+}
+
+function calculateWinPercent ( player ) {
+    player.winPercent = Math.round(((player.totalNumberOfWins/player.totalGames) * 100));
+    return player.winPercent;
 }
 
 
@@ -20,7 +26,7 @@ Game.prototype.printNamesToDom = function () {
     player2.text('');
     player1.append('<button type="submit" class="playerBtn btn btn-block btn-md btn-info" value="'+this.players[0].name+'">'+this.players[0].name+'</button>');
     player2.append('<button type="submit" class="playerBtn btn btn-block btn-md btn-info" value="'+this.players[1].name+'">'+this.players[1].name+'</button>');
-}
+};
 
 Game.prototype.addPlayersToGame = function () {
     player1.name = $('#player1').val();
@@ -38,19 +44,17 @@ function gameState () {
     } else {
         newGame.numberOfGames = 1;
     }
-    console.log(newGame.numberOfGames);
 }
 
 Game.prototype.addWins = function ( player ) {
-    player.numberOfWins++;
-    return player.numberOfWins;
-}
+    return player.numberOfWins++;
+};
 
 Game.prototype.addGames = function () {
     return this.players.forEach(function ( player ) {
         return player.seriesGames++;
     });
-}
+};
 
 
 Game.prototype.printWinsToDom = function () {
@@ -58,82 +62,71 @@ Game.prototype.printWinsToDom = function () {
     this.players.forEach(function ( player ) {
         $('#scores').append('<h2>'+player.name+':&nbsp;'+player.numberOfWins+'</h2>');
     });
-}
+};
 
 Game.prototype.calculateWinner = function () {
     if (((player1.numberOfWins + player2.numberOfWins === 3) || player1.numberOfWins === 2 || player2.numberOfWins === 2) && (newGame.numberOfGames === 3)) {
         if (player1.numberOfWins === 2) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the 3 game series!</h1>');
+            newGame.resetSeries();
             player1.isWinner = true;
-            player1.numberOfWins = 0;
-            player2.numberOfWins = 0;
-            player1.seriesGames = 0;
-            player2.seriesGames = 0;
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the 3 game series!</h1>');
+            newGame.resetSeries();
             player2.isWinner = true;
-            player1.numberOfWins = 0;
-            player2.numberOfWins = 0;
-            player1.seriesGames = 0;
-            player2.seriesGames = 0;
         }
         newGame.saveStats(player1, player2);
     } else if (((player1.numberOfWins + player2.numberOfWins === 5) || player1.numberOfWins === 3 || player2.numberOfWins === 3) && (newGame.numberOfGames === 5)) {
         if (player1.numberOfWins === 3) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the 5 game series!</h1>');
+            newGame.resetSeries();
             player1.isWinner = true;
-            player1.numberOfWins = 0;
-            player2.numberOfWins = 0;
-            player1.seriesGames = 0;
-            player2.seriesGames = 0;
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the 5 game series!</h1>');
+            newGame.resetSeries();
             player2.isWinner = true;
-            player1.numberOfWins = 0;
-            player2.numberOfWins = 0;
-            player1.seriesGames = 0;
-            player2.seriesGames = 0;
-        };
+        }
         newGame.saveStats(player1, player2);
     } else if ( newGame.numberOfGames === 1 ) {
         if (player1.numberOfWins === 1) {
             $('#scores').text('');
             $('#scores').append('<h1>'+player1.name+' wins the game!</h1>');
+            newGame.resetSeries();
             player1.isWinner = true;
-            player1.numberOfWins = 0;
-            player2.numberOfWins = 0;
-            player1.seriesGames = 0;
-            player2.seriesGames = 0;
         } else {
             $('#scores').text('');
             $('#scores').append('<h1>'+player2.name+' wins the game!</h1>');
+            newGame.resetSeries();
             player2.isWinner = true;
-            player1.numberOfWins = 0;
-            player2.numberOfWins = 0;
-            player1.seriesGames = 0;
-            player2.seriesGames = 0;
-        };
+        }
         newGame.saveStats(player1, player2);
-    };
-}
+    }
+};
+
+Game.prototype.resetSeries = function () {
+    this.players.forEach(function (player) {
+        player.numberOfWins = 0;
+        player.seriesGames = 0;
+    });
+};
 
 
 
 Game.prototype.addStatsToLocalStorage = function ( player ) {
     if(!JSON.parse(localStorage.getItem('playerStats'))) {
         localStorage.setItem('playerStats', JSON.stringify([]));
-    };
+    }
     var currentStateOfLocalStorage = JSON.parse(localStorage.getItem('playerStats'));
     var playerToPush = checkObject(player, currentStateOfLocalStorage);
     if (playerToPush.length === 0) {
         currentStateOfLocalStorage.push(player);
         localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
-    };
-}
+    }
+};
 
 
 
@@ -146,15 +139,18 @@ Game.prototype.saveStats = function( player1, player2 ) {
         if (player1.name === currentStateOfLocalStorage[i].name && player1.isWinner === true) {
             currentStateOfLocalStorage[i].totalNumberOfWins++;
             currentStateOfLocalStorage[i].totalGames++;
+            calculateWinPercent(currentStateOfLocalStorage[i]);
             player1.isWinner = false;
         } else if (player2.name === currentStateOfLocalStorage[i].name && player2.isWinner === true) {
             currentStateOfLocalStorage[i].totalNumberOfWins++;
             currentStateOfLocalStorage[i].totalGames++;
+            calculateWinPercent(currentStateOfLocalStorage[i]);
             player2.isWinner = false;
         } else if (player1.name === currentStateOfLocalStorage[i].name || player2.name === currentStateOfLocalStorage[i].name) {
             currentStateOfLocalStorage[i].totalGames++;
+            calculateWinPercent(currentStateOfLocalStorage[i]);
         }
-    };
+    }
 
     localStorage.setItem('playerStats', JSON.stringify(currentStateOfLocalStorage));
 
@@ -167,15 +163,15 @@ Game.prototype.addStatsFromLocalStorageToDom = function () {
         return b.totalNumberOfWins - a.totalNumberOfWins;
     });
     currentStateOfLocalStorage.forEach(function ( player ) {
-        $('#playerStats').append('<tr><td>'+player.name+'</td><td>'+player.totalNumberOfWins+'</td><td>'+player.totalGames+'</td></tr>');
+        $('#playerStats').append('<tr><td>'+player.name+'</td><td>'+player.totalNumberOfWins+'</td><td>'+player.totalGames+'</td><td>'+player.winPercent+'%</td></tr>');
     });
-}
+};
 
 function checkObject ( playerObj, array ) {
     return array.filter(function (el, index) {
         return el.name === playerObj.name;
     });
-};
+}
 
 
 

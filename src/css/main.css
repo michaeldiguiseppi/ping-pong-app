@@ -12,4 +12,9 @@
 
 thead {
     border-bottom: 1px solid black;
+    text-align: center;
+}
+
+tbody {
+    text-align: center;
 }
