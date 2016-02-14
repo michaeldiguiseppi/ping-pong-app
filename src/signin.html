@@ -5,6 +5,7 @@
     <title>Ping Pong App</title>
     <link rel="icon" type="image/png" href="media/Table-tennis.png">
 
+
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/journal/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
   </head>
@@ -24,45 +25,38 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="index.html">Tracker</a></li>
-        <li class="active"><a href="stats.html">Stats<span class="sr-only">(current)</span></a></li>
+        <li><a href="stats.html">Stats</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="signin.html">Sign In</a></li>
+        <li class="active"><a href="signin.html">Sign In<span class="sr-only">(current)</span></a></li>
       </ul>
     </div>
   </div>
 </nav>
 
 <div class="container">
-  <div class="row">
-    <h1 class="text-center">Stat Tracker</h1>
-  </div>
-</div>
-<hr>
-<br><br>
-<div class="container">
-  <div class="row">
-    <div class="col-lg-2 col-lg-offset-5">
-      <button type="submit" class="btn btn-success" id="updateStats">Update</button>
-      <button type="reset" class="btn btn-primary" id="resetStats">Reset</button>
+  <form class="form-horizontal" action="index.html">
+    <fieldset>
+      <div class="form-group">
+        <label for="username" class="col-lg-2 col-lg-offset-2 control-label">Username</label>
+        <div class="col-lg-4">
+          <input type="text" class="form-control" id="username" placeholder="Username">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputPassword" class="col-lg-2 col-lg-offset-2 control-label">Password</label>
+        <div class="col-lg-4">
+          <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+      </div>
+      <div class="form-group">
+      <div class="col-lg-7 col-lg-offset-5">
+        <button type="reset" class="btn btn-default">Cancel</button>
+        <button type="submit" class="btn btn-info signin-submit">Submit</button>
+      </div>
     </div>
-    <br>
-    <div class="col-lg-6 col-lg-offset-3">
-      <table>
-        <thead>
-          <tr>
-            <th class="col-lg-2 col-lg-offset-1">Player Name</th>
-            <th class="col-lg-1">Win Count</th>
-            <th class="col-lg-1">Total Games</th>
-            <th class="col-lg-1">Win Percentage</th>
-          </tr>
-        </thead>
-        <tbody id="playerStats">
-
-        </tbody>
-      </table>
-    </div>
-  </div>
+    </fieldset>
+  </form>
 </div>
 
 

@@ -61,4 +61,13 @@ $('#resetStats').on('click', function () {
     $('#updateStats').click();
 });
 
+$('.signin-submit').on('click', function (event) {
+    event.preventDefault();
+    var userName = $('#username').val();
+    var password = $('#password').val();
+
+    window.location.href = "./index.html";
+
+});
+
 
